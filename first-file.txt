@@ -1,6 +1,0 @@
-Ok this file will work as a draft and container of thoughts for my project
-I will be laying out what im doing and why im doing it to have somewhere to look back to.
-
-1. Ok so first created a projects folder and create this app folder GUITAR-SONG-APP 
-2. For now i think only table needed is SONGS table and database called songify
-3. will initialize repository and then create repo in github 

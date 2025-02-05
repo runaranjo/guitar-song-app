@@ -1,0 +1,69 @@
+body {
+    background: #2c2c2c;
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
+      helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+    color: teal;
+  }
+
+  main {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+
+  h1 {
+    margin: 30px;
+    font-family: 'Roboto';
+    text-shadow: 5px 0 #232931;
+    font-size: 6rem;
+    color: teal
+  }
+
+.welcome-title {
+    margin: 30px;
+    font-family: 'Roboto';
+    text-shadow: 5px 0 #232931;
+    font-size: 6rem;
+    color: rgb(169, 190, 190)
+  }
+  button {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: teal;
+    /* float: right;
+    margin-bottom: -100px; */
+    border: 0;
+    padding: 15px;
+    color: #ffffff;
+    font-size: 14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+
+  input {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    font-size: 0.9rem;
+    background: #888;
+    padding: 1rem;
+    color: white;
+    cursor: pointer;
+  }
+
+  footer {
+    position: absolute;
+    bottom: 0;
+  }
+  
