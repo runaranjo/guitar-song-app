@@ -26,14 +26,14 @@ body {
     font-size: 6rem;
     color: teal
   }
-
-.welcome-title {
+/* 
+  h2{
     margin: 30px;
     font-family: 'Roboto';
     text-shadow: 5px 0 #232931;
-    font-size: 6rem;
+    font-size: 4rem;
     color: rgb(169, 190, 190)
-  }
+  } */
   button {
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
@@ -48,7 +48,6 @@ body {
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
     cursor: pointer;
-    border-radius: 6px;
   }
 
   input {

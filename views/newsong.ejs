@@ -1,0 +1,59 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container">
+    <%- include('partials/navbar.ejs')%>
+   
+    
+    <main class="content">
+    <!-- Form to add a new song -->
+    <form action="/addsong" method="POST">
+        <h2 class="form-title">Add a New Song</h2>
+        
+        <div class="form-group">
+            <label for="song_name">Song Title:</label>
+            <input type="text" id="song_name" name="song_name" class="form-control" placeholder="Song Title" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="release_year">Release Year:</label>
+            <input type="number" id="release_year" name="release_year" class="form-control" placeholder="Release Year" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="duration">Duration:</label>
+            <input type="text" id="duration" name="duration" class="form-control" placeholder="Song Duration (e.g., 00:03:45)" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="video_url">Video URL (YouTube or other):</label>
+            <input type="url" id="video_url" name="video_url" class="form-control" placeholder="YouTube Link" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="song_tuning">Guitar Tuning:</label>
+            <input type="text" id="song_tuning" name="song_tuning" class="form-control" placeholder="e.g., Standard, Drop D" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="song_key">Musical Key:</label>
+            <input type="text" id="song_key" name="song_key" class="form-control" placeholder="e.g., C Major, A Minor" required>
+        </div>
+        <div class="success-container">
+            <p>Song added to the database!</p>
+        </div>
+        <button type="submit" class="form-btn">Add Song</button>
+    </form>
+    
+
+</main>
+</div>
+
+<%- include("partials/footer.ejs") %>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+        const form_btn = document.querySelector(".form-btn")
+        
+    })
+ 
+</script>

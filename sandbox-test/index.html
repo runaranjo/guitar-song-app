@@ -1,11 +1,23 @@
-<!-- Step 3 Add Header -->
-<%- include("partials/header.ejs")%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Library</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Your Song Library </h2>
+            <ul>
+                <li><a href="#">All Songs</a></li>
+                <li><a href="#">Add Song</a></li>
+                <li><a href="#">Random Song</a></li>
+            </ul>
+        </nav>
 
-
-
-
-<div class="container">
-    <%- include('partials/navbar.ejs')%>
         <!-- Main Content -->
         <main class="content">
             <h1>All Songs</h1>
@@ -26,6 +38,5 @@
             </div>
         </main>
     </div>
-
-    <!-- Step 3 Add Footer -->
-<%- include("partials/footer.ejs")%>
+</body>
+</html>
