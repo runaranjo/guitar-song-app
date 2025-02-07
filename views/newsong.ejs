@@ -6,7 +6,7 @@
     
     <main class="content">
     <!-- Form to add a new song -->
-    <form action="/addsong" method="POST">
+    <form id="addSongForm" action="/addsong" method="POST">
         <h2 class="form-title">Add a New Song</h2>
         
         <div class="form-group">
@@ -38,11 +38,13 @@
             <label for="song_key">Musical Key:</label>
             <input type="text" id="song_key" name="song_key" class="form-control" placeholder="e.g., C Major, A Minor" required>
         </div>
-        <div class="success-container">
-            <p>Song added to the database!</p>
+        <div class="message-container success-container">
+            <span id="closeSuccessMessage" class="close-btn success-close-btn">&times;</span>
+            <p id="messageConfirmationContainer">Song added to the database!</p>
         </div>
         <button type="submit" class="form-btn">Add Song</button>
     </form>
+    
     
 
 </main>
@@ -51,9 +53,34 @@
 <%- include("partials/footer.ejs") %>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function(){
-        const form_btn = document.querySelector(".form-btn")
-        
-    })
- 
+document.addEventListener("DOMContentLoaded", function(){    })
+const success_save = '<%=success%>';
+const failed_save = '<%=failed%>';
+const success_box = document.querySelector('.success-container');
+const close_btn = document.getElementById('closeSuccessMessage');
+const confirmation_msg = document.getElementById('messageConfirmationContainer');
+
+if (success_save === 'true'){
+    success_box.style.display = 'block'
+} 
+if(failed_save === 'true') {
+    success_box.className = 'message-container error-container'
+    close_btn.className = 'close-btn error-close-btn'
+    confirmation_msg.textContent = 'Error adding song to the database'
+    success_box.style.display = 'block'
+}
+
+// Close success message when clicking "X"
+document.querySelector(".close-btn").addEventListener("click", function () {
+    document.querySelector(".message-container").style.display = "none";
+});
+
+// const form_btn = document.querySelector(".form-btn")
+// form_btn.addEventListener("click", () => {
+
+// })
+
+
+
+
 </script>

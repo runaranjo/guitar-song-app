@@ -13,8 +13,11 @@ router.get('/home', (req, res) => {
     res.render('home.ejs')
 })
 
+
+// Success/Failed to show either Success Message or Error Message
+
 router.get('/newsong', (req, res) => {
-    res.render('newsong.ejs')
+    res.render('newsong.ejs', {success: false, failed: false})
 })
 
 router.post('/addsong', async (req, res) => {
@@ -26,14 +29,16 @@ router.post('/addsong', async (req, res) => {
    const song_key = req.body.song_key;
    
     try {
-    //    res.json({song_name, release_year, song_duration, video_url, song_tuning, song_key});
+    //    res.json({success: true});
      //  await db.query('INSERT INTO songs (song_name, release_year, duration, video_url, song_tuning, song_key) values ($1, $2, $3, $4, $5, $6)',
       //                 [song_name, release_year, song_duration, video_url, song_tuning, song_key])
      console.log('Following song has been added to the database: ',song_name, release_year, song_duration, video_url, song_tuning, song_key)
-        res.redirect('/newsong')
+     res.render('newsong.ejs', {success: true, failed: false})
+
 
 } catch (error) {
         console.error('This is an error happening:', error)
+        res.status(500).render('newsong.ejs',{success:false, failed: true})
     }
 })
 

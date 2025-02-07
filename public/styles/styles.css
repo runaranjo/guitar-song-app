@@ -216,8 +216,10 @@ color: rgb(169, 132, 200);
   color: white;
 }
 
-/* Song added message container */
-.success-container{
+/* Song added message container  ------------------------------- */
+
+/* .success-container{
+    display: none;
     height: 10%;
     width: 30%;
     margin-top: 20px;
@@ -226,6 +228,7 @@ color: rgb(169, 132, 200);
     border-radius: 4px;
     background-color: rgb(192, 219, 186);
     padding: 10px;
+    position: relative;
     align-self: center;
 }
 
@@ -234,7 +237,100 @@ color: rgb(169, 132, 200);
     font-family: "DM Mono";
 }
 
+.error-container{
+    display: none;
+    height: 10%;
+    width: 30%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid red;
+    border-radius: 4px;
+    background-color: rgb(214, 159, 159);
+    padding: 10px;
+    position: relative;
+    align-self: center;
+}
+
+.error-container > p {
+    color: rgb(145, 36, 36);
+    font-family: "DM Mono";
+} */
+
+/* Common styles for both success and error containers */
+.message-container {
+    display: none;
+    height: 10%;
+    width: 30%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    padding: 10px;
+    position: relative;
+    align-self: center;
+}
+
+.message-container > p {
+    font-family: "DM Mono";
+}
+
+/* Success container specific styles */
+.success-container {
+    border: 1px solid green;
+    background-color: rgb(192, 219, 186);
+}
+
+.success-container > p {
+    color: green;
+}
+
+/* Error container specific styles */
+.error-container {
+    border: 1px solid red;
+    background-color: rgb(214, 159, 159);
+}
+
+.error-container > p {
+    color: rgb(145, 36, 36);
+}
+
+
+
+
+/* Common styles for close buttons */
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Error button specific styles */
+.error-close-btn {
+    color: darkred;
+}
+
+.error-close-btn:hover {
+    color: darkred;
+}
+
+/* Success button specific styles */
+.success-close-btn {
+    color: green;
+}
+
+.success-close-btn:hover {
+    color: darkgreen;
+}
+
+
+/* ------------------------------- */
+
+/* ----FOOTER--------------------- */
 footer{
   background-color: #c350fc;
   text-align: center;
 }
+
+ /* ------------------------------- */
