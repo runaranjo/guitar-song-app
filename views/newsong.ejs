@@ -13,6 +13,11 @@
             <label for="song_name">Song Title:</label>
             <input type="text" id="song_name" name="song_name" class="form-control" placeholder="Song Title" required>
         </div>
+
+        <div class="form-group">
+            <label for="artist_name">Song Title:</label>
+            <input type="text" id="artist_name" name="artist_name" class="form-control" placeholder="Artist" required>
+        </div>
     
         <div class="form-group">
             <label for="release_year">Release Year:</label>
@@ -31,18 +36,18 @@
     
         <div class="form-group">
             <label for="song_tuning">Guitar Tuning:</label>
-            <input type="text" id="song_tuning" name="song_tuning" class="form-control" placeholder="e.g., Standard, Drop D" required>
+            <input type="text" id="song_tuning" name="song_tuning" class="form-control" placeholder="Tuning: e.g., Standard, Drop D" required>
         </div>
     
         <div class="form-group">
             <label for="song_key">Musical Key:</label>
-            <input type="text" id="song_key" name="song_key" class="form-control" placeholder="e.g., C Major, A Minor" required>
+            <input type="text" id="song_key" name="song_key" class="form-control" placeholder="Song key: e.g., C Major, A Minor" required>
         </div>
         <div class="message-container success-container">
             <span id="closeSuccessMessage" class="close-btn success-close-btn">&times;</span>
-            <p id="messageConfirmationContainer">Song added to the database!</p>
+            <p id="messageConfirmationContainer"> </p>
         </div>
-        <button type="submit" class="form-btn">Add Song</button>
+        <button type="submit" class="form-btn">Add Song  <% locals.song_name%> </button>
     </form>
     
     
@@ -56,17 +61,19 @@
 document.addEventListener("DOMContentLoaded", function(){    })
 const success_save = '<%=success%>';
 const failed_save = '<%=failed%>';
+const song_name = '<%= locals.song_name %>';
 const success_box = document.querySelector('.success-container');
 const close_btn = document.getElementById('closeSuccessMessage');
 const confirmation_msg = document.getElementById('messageConfirmationContainer');
 
 if (success_save === 'true'){
+    confirmation_msg.textContent = `Song ${song_name} added to the database!`
     success_box.style.display = 'block'
 } 
 if(failed_save === 'true') {
     success_box.className = 'message-container error-container'
     close_btn.className = 'close-btn error-close-btn'
-    confirmation_msg.textContent = 'Error adding song to the database'
+    confirmation_msg.textContent = `Error adding song to the database`
     success_box.style.display = 'block'
 }
 

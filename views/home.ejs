@@ -9,8 +9,12 @@
         <!-- Main Content -->
         <main class="content">
             <h1>All Songs</h1>
+            <button type="button" class="show-songs-btn">Show Songs</button>
+            
+            
+            
             <div class="song-grid">
-                <div class="song-card">
+                <!-- <div class="song-card">
                     <h3>Song Title</h3>
                     <p>Artist Name</p>
                     <button>Edit</button>
@@ -21,11 +25,37 @@
                     <p>Artist Name</p>
                     <button>Edit</button>
                     <button>Delete</button>
-                </div>
-                <!-- More song cards will go here -->
+                </div> -->  
             </div>
         </main>
     </div>
 
-    <!-- Step 3 Add Footer -->
+    <!-- Footer -->
 <%- include("partials/footer.ejs")%>
+
+<script>
+    const song_grid = document.querySelector('.song-grid');
+    const show_button = document.querySelector('.show-songs-btn')
+    // const song_card = document.querySelector('.song-card');
+    const song_list = JSON.parse('<%- JSON.stringify(song_data) %>');
+    console.log(song_list)
+    
+    show_button.addEventListener('click', () => {
+        song_list.forEach(element => {
+        const newSongCard = document.createElement('div')
+        newSongCard.classList.add('song-card')
+        newSongCard.innerHTML = `
+                    <h3>${element.title}</h3>
+                    <p>${element.artist}</p>
+                    <button>Edit</button>
+                    <button>Delete</button>`
+        song_grid.appendChild(newSongCard)
+
+        setTimeout(() => newSongCard.classList.add('show'), 125)
+
+    });
+
+
+    })
+
+</script>

@@ -183,19 +183,30 @@ color: rgb(169, 132, 200);
 
 /* Song Card */
 .song-card {
+  opacity: 0;
+  transform: translateX(80%);
+  transition: all 0.5s ease-in-out;
   background: rgb(169, 132, 200);
   padding: 15px;
   border-radius: 8px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  
+  
+}
+
+.song-card.show{
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .song-card:hover{
-  background-color: rgb(150, 99, 192);;
+  background-color: rgb(150, 99, 192);
 }
 
-.song-card h3 {
+.song-card h3, p {
   margin-bottom: 5px;
+  font-family: monospace;
 }
 
 .song-card button {
@@ -216,10 +227,35 @@ color: rgb(169, 132, 200);
   color: white;
 }
 
+.show-songs-btn {
+    background-color: #a9fbac; /* Green background */
+    color: rgb(150, 99, 192); /* White text */
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-family: monospace;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.show-songs-btn:hover {
+    background-color: #9cc59d; /* Darker green on hover */
+    transform: scale(1.05); /* Slight increase in size */
+}
+
+.show-songs-btn:active {
+    background-color: #7bbb7c; /* Even darker green when clicked */
+    transform: scale(0.98); /* Slight decrease in size */
+}
+
 /* Song added message container  ------------------------------- */
 
 /* .success-container{
-    display: none;
+    display: none;ß
     height: 10%;
     width: 30%;
     margin-top: 20px;
