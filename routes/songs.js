@@ -9,14 +9,14 @@ router.get('/', (req, res) => {
     res.render('index.ejs')
 })
 
-router.get('/home', (req, res) => {
-    const song_list = [
-        { title: "Bohemian Rhapsody", artist: "Queen", year: 1975 },
-        { title: "Billie Jean", artist: "Michael Jackson", year: 1982 },
-        { title: "Shape of You", artist: "Ed Sheeran", year: 2017 },
-        { title: "Smells Like Teen Spirit", artist: "Nirvana", year: 1991 }
-      ];   
-      
+router.get('/home', async (req, res) => {
+      let song_list = [];   
+      const song_data = await getSongs();
+    //   console.log(song_data)
+      song_data.rows.forEach(element => {
+          song_list.push({song_title: element.song_name, artist_name: element.artist_name})
+      });
+    // console.log(song_list)
     res.render('home.ejs', {song_data: song_list})
 })
 
@@ -47,9 +47,15 @@ router.post('/addsong', async (req, res) => {
     }
 })
 
-
-
-
+async function getSongs() {
+    try {
+       const result = await db.query('SELECT * FROM songs') 
+       return result
+    } catch (error) {
+        console.error('This is an error happening:', error)
+        return error
+    }
+}
 
 
 

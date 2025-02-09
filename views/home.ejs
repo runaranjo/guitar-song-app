@@ -8,8 +8,11 @@
     <%- include('partials/navbar.ejs')%>
         <!-- Main Content -->
         <main class="content">
-            <h1>All Songs</h1>
+            <h1 class="songs-title">All Songs</h1>
+            <div class="container-song-buttons">
             <button type="button" class="show-songs-btn">Show Songs</button>
+            <button id="random-song-btn" class="show-songs-btn">Get a random song to practice</button>
+            </div>
             
             
             
@@ -36,26 +39,54 @@
 <script>
     const song_grid = document.querySelector('.song-grid');
     const show_button = document.querySelector('.show-songs-btn')
+    const rand_song_btn = document.getElementById('random-song-btn')
+    // console.log(rand_song_btn)
     // const song_card = document.querySelector('.song-card');
     const song_list = JSON.parse('<%- JSON.stringify(song_data) %>');
-    console.log(song_list)
+    // console.log(song_list)
     
-    show_button.addEventListener('click', () => {
-        song_list.forEach(element => {
+show_button.addEventListener('click', () => {
+    song_grid.innerHTML = '';
+    song_list.forEach(element => {
         const newSongCard = document.createElement('div')
         newSongCard.classList.add('song-card')
         newSongCard.innerHTML = `
-                    <h3>${element.title}</h3>
-                    <p>${element.artist}</p>
+                    <h3>${element.song_title}</h3>
+                    <p>${element.artist_name}</p>
                     <button>Edit</button>
                     <button>Delete</button>`
         song_grid.appendChild(newSongCard)
-
+        // time to delay the song card from appearing
         setTimeout(() => newSongCard.classList.add('show'), 125)
-
     });
+});
 
 
-    })
+rand_song_btn.addEventListener('click', () => {
+    song_grid.innerHTML = '';
+    const rand_song = getRandomSong();
+    const newSongCard = document.createElement('div')
+    newSongCard.classList.add('song-card')
+    newSongCard.innerHTML = `
+                <h3>${rand_song.song_title}</h3>
+                <p>${rand_song.artist_name}</p>
+                <button>Edit</button>
+                <button>Delete</button>`
+    song_grid.appendChild(newSongCard)
+        // time to delay the song card from appearing
+    setTimeout(() => newSongCard.classList.add('show'), 125)
+    console.log(rand_song)
+});
+
+
+
+function getRandomSong(){
+    const rand_song_idx = Math.floor((Math.random() * song_list.length))
+    random_song = song_list[rand_song_idx]
+    return random_song
+  
+}
+
+
 
 </script>
