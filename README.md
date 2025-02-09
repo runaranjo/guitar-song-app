@@ -3,10 +3,11 @@
 A Node.js app to store and retrieve guitar songs for practice.
 
 ## Features
-- Add songs to the database.
+- Save your personal library of songs
 - Retrieve a random song for practice.
-- View all songs.
+- Retrieve all songs
 
 ## Setup
 1. Clone the repo.
 2. Run `npm install`.
+3. 'npm run start'
