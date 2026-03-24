@@ -18,6 +18,24 @@ I will be laying out what im doing and why im doing it to have somewhere to look
 13. REMEMBER: POST IS TO SEND DATA - use a href to make a button take you to other page
 
 
+---
+
+## 2026-03-23 — Session with Claude
+
+### Changes made:
+1. **Credentials moved to .env** — DB user, host, name, password, port were hardcoded in `db/db.js`. Moved to `.env` (already gitignored).
+2. **db.js reads from env vars** — now uses `process.env.DB_USER` etc. instead of hardcoded strings.
+3. **Fixed dotenv timing bug** — with ES modules, `dotenv.config()` in `index.js` fires too late because imports are hoisted. Fixed by adding `import 'dotenv/config'` directly in `db/db.js`.
+
+4. **Fixed song list parsing bug** — `JSON.parse('<%- JSON.stringify(song_data) %>')` was breaking when song titles contained apostrophes (e.g. "You won't see me"). Fixed by removing the wrapping `JSON.parse` and quotes — `JSON.stringify` output is already valid JS.
+
+### Next steps:
+- Split `routes/songs.js` into routes + db queries files
+- Move `db.connect()` into `db/db.js`
+- Add auth (register, login, sessions)
+
+---
+
 # EXAMPLE TO DOC ROADBLOCKS - Template
 
 ## Roadblock: Database Connection Issue

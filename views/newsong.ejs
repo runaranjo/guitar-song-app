@@ -7,17 +7,20 @@
     <main class="content">
     <!-- Form to add a new song -->
      <div class="form-div">
-    <form id="addSongForm" action="/addsong" method="POST">
-        <h2 class="form-title">Add a New Song</h2>
-        
+    <form id="addSongForm" action="/addsong" method="POST">        
         <div class="form-group">
             <label for="song_name">Song Title:</label>
             <input type="text" id="song_name" name="song_name" class="form-control" placeholder="Song Title" required>
         </div>
 
         <div class="form-group">
-            <label for="artist_name">Song Title:</label>
+            <label for="artist_name">Artist:</label>
             <input type="text" id="artist_name" name="artist_name" class="form-control" placeholder="Artist" required>
+        </div>
+
+        <div class="form-group">
+            <label for="album_name">Album:</label>
+            <input type="text" id="album_name" name="album_name" class="form-control" placeholder="Album Title" required>
         </div>
     
         <div class="form-group">
@@ -48,8 +51,16 @@
             <span id="closeSuccessMessage" class="close-btn success-close-btn">&times;</span>
             <p id="messageConfirmationContainer"> </p>
         </div>
-        <button type="submit" class="form-btn">Add Song  <% locals.song_name%> </button>
+        <button type="submit" class="form-btn">Add Song</button>
     </form>
+    <div class="form-side"> 
+        <h2 class="form-title">Add</h2>
+        <h2 class="form-title">a</h2>
+        <h2 class="form-title">New</h2>
+        <h2 class="form-title">Song</h2>
+        
+    
+    </div>
 </div>
     
 
@@ -62,19 +73,19 @@
 document.addEventListener("DOMContentLoaded", function(){    })
 const success_save = '<%=success%>';
 const failed_save = '<%=failed%>';
-const song_name = '<%= locals.song_name %>';
+const song_message = '<%- locals.song_result %>'
 const success_box = document.querySelector('.success-container');
 const close_btn = document.getElementById('closeSuccessMessage');
 const confirmation_msg = document.getElementById('messageConfirmationContainer');
 
 if (success_save === 'true'){
-    confirmation_msg.textContent = `Song ${song_name} added to the database!`
+    confirmation_msg.textContent = song_message;
     success_box.style.display = 'block'
 } 
 if(failed_save === 'true') {
     success_box.className = 'message-container error-container'
     close_btn.className = 'close-btn error-close-btn'
-    confirmation_msg.textContent = `Error adding song to the database`
+    confirmation_msg.textContent = song_message;
     success_box.style.display = 'block'
 }
 

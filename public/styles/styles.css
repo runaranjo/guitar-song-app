@@ -31,40 +31,56 @@
 
 .form-div{
     /* border: 2px solid black; */
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /* border: 2px solid black; */
+    /* margin: 0 auto; */
+    /* grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    height: 100vh;
+    height: 50vh; */
     
 }
 
 form {
-    max-width: 700px;
-    margin: 0 auto;
-    /* padding: 20px; */
+    /* max-width: 700px; */
+    /* margin: 0 auto; */
+    padding-top: 20px;
+    width: 50%;
     background-color: #bccbf0;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border:  4px solid rgb(185, 102, 202);
     display: flex;
     flex-direction: column;
-    grid-column: 2;
-    grid-row: 2;
+
 }
+
+
+.form-side{
+  /* border: 2px solid black; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-content: center; */
+  gap: 20px;
+  background-color: rgb(185, 102, 202);;
+  width: 50%;
+}
+
 .form-title {
     text-align: center;
     font-size: 22px;
     text-transform: uppercase;
     /* background-color: #adc0f1; */
     padding: 15px;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-
     /* margin: 30px; */
     font-family: 'Roboto';
     text-shadow: 3px 0 #2b5edf;
     font-size: 3rem;
-    color: rgb(169, 132, 200);
+    color: #bccbf0;
   }
 
 .form-group {
@@ -101,7 +117,6 @@ form {
  .form-btn {
     background-color: rgb(185, 102, 202);
     border: none;
-    border-bottom-right-radius: 4px;
     border-bottom-left-radius: 4px;
     color: #fff;
     font-size: 20px;
@@ -353,8 +368,8 @@ color: rgb(169, 132, 200);
 /* success and error container style */
 .message-container {
     display: none;
-    height: 10%;
-    width: 30%;
+    height: 20%;
+    width: 40%;
     margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 4px;
