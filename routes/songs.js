@@ -1,5 +1,6 @@
 import express from "express";
 import { getSongs, saveNewSong } from "../db/queries.js";
+import { isLoggedIn } from "../middleware/auth.js";
 
 const router = express.Router()
 
@@ -7,7 +8,7 @@ router.get('/', (req, res) => {
     res.render('index.ejs')
 });
 
-router.get('/home', async (req, res) => {
+router.get('/home', isLoggedIn, async (req, res) => {
     let song_list = [];
     const song_data = await getSongs();
     song_data.rows.forEach(song => {
@@ -16,11 +17,11 @@ router.get('/home', async (req, res) => {
     res.render('home.ejs', { song_data: song_list })
 });
 
-router.get('/newsong', (req, res) => {
+router.get('/newsong', isLoggedIn, (req, res) => {
     res.render('newsong.ejs', { success: false, failed: false })
 });
 
-router.post('/addsong', async (req, res) => {
+router.post('/addsong', isLoggedIn, async (req, res) => {
     const song_name = req.body.song_name;
     const artist_name = req.body.artist_name;
     const album_name = req.body.album_name;

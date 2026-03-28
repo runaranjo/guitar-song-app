@@ -127,3 +127,43 @@ async function saveNewAlbum(album_name, artist_id) {
         throw error;
     }
 }
+
+// ------------------------------------------ USERS ------------------------------------------
+
+export async function doesUserExist(email) {
+    try {
+        const result = await db.query(
+            'SELECT EXISTS(SELECT * FROM users WHERE email_address = $1) as user_exists',
+            [email]
+        )
+        return result.rows[0].user_exists;
+    } catch (error) {
+        console.error('Error checking if user exists:', error);
+        throw error;
+    }
+}
+
+export async function saveNewUser(username, email, hashed_password) {
+    try {
+        await db.query(
+            'INSERT INTO users (user_name, email_address, hashed_password) VALUES ($1, $2, $3)',
+            [username, email, hashed_password]
+        )
+    } catch (error) {
+        console.error('Error saving new user:', error);
+        throw error;
+    }
+}
+
+export async function getUserByEmail(email) {
+    try {
+        const result = await db.query(
+            'SELECT * FROM users WHERE email_address = $1',
+            [email]
+        )
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error getting user by email:', error);
+        throw error;
+    }
+}

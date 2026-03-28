@@ -1,3 +1,7 @@
+# Test and scratch files
+*.test.js
+sandbox-test/
+
 # Logs
 logs
 *.log

@@ -20,7 +20,7 @@ A personal guitar practice tool. You save songs you've learned, then hit a butto
 | Templating | EJS (server-rendered HTML) |
 | Database | PostgreSQL |
 | DB Driver | pg (node-postgres) |
-| Auth (planned) | express-session + bcrypt |
+| Auth | express-session + bcrypt |
 | Dev server | nodemon |
 | Env vars | dotenv |
 

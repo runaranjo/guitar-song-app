@@ -1,0 +1,43 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container">
+    <%- include('partials/navbar.ejs')%>
+
+    <main class="content">
+        <div class="form-div">
+            <form id="registerForm" action="/register" method="POST">
+
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                </div>
+
+                <% if (error) { %>
+                <div class="message-container error-container">
+                    <p><%= error %></p>
+                </div>
+                <% } %>
+
+                <button type="submit" class="form-btn">Register</button>
+
+            </form>
+            <div class="form-side">
+                <h2 class="form-title">Create</h2>
+                <h2 class="form-title">your</h2>
+                <h2 class="form-title">Account</h2>
+            </div>
+        </div>
+    </main>
+</div>
+
+<%- include("partials/footer.ejs") %>
