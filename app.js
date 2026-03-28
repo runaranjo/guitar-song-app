@@ -2,10 +2,6 @@ import express from "express"
 import session from "express-session"
 import songRoutes from './routes/songs.js'
 import authRoutes from './routes/auth.js'
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
