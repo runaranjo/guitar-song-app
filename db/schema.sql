@@ -58,7 +58,28 @@ CREATE TABLE user_songs (
 
 
 
- -- TEST DATA
+-- View: Song details per user (includes pick count and tier)
+CREATE VIEW vw_user_songdetails AS
+    SELECT
+        us.user_id,
+        us.song_id,
+        us.song_pick_count,
+        us.song_tier,
+        s.song_title,
+        a.artist_name,
+        al.album_name,
+        s.release_year,
+        s.duration,
+        s.video_url,
+        s.song_tuning,
+        s.song_key
+    FROM user_songs us
+    JOIN songs s ON us.song_id = s.song_id
+    JOIN artists a ON s.artist_id = a.artist_id
+    JOIN albums al ON s.album_id = al.album_id;
+
+
+-- TEST DATA
 
 -- INSERT INTO songs (song_name, artist_name, release_year, duration, video_url, song_tuning, song_key)
 -- VALUES

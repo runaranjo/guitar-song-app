@@ -64,9 +64,10 @@ show_button.addEventListener('click', () => {
 });
 
 
-rand_song_btn.addEventListener('click', () => {
+rand_song_btn.addEventListener('click', async () => {
     song_grid.innerHTML = '';
-    const rand_song = getRandomSong();
+    const response = await fetch('/randomsong')
+    const rand_song = await response.json()
     const newSongCard = document.createElement('div')
     newSongCard.classList.add('song-card')
     newSongCard.innerHTML = `
@@ -75,19 +76,8 @@ rand_song_btn.addEventListener('click', () => {
                 <button>Edit</button>
                 <button>Delete</button>`
     song_grid.appendChild(newSongCard)
-        // time to delay the song card from appearing
     setTimeout(() => newSongCard.classList.add('show'), 125)
-    console.log(rand_song)
 });
-
-
-
-function getRandomSong(){
-    const rand_song_idx = Math.floor((Math.random() * song_list.length))
-    random_song = song_list[rand_song_idx]
-    return random_song
-  
-}
 
 
 

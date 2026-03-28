@@ -29,13 +29,14 @@ const INSERT_ALBUM       = `INSERT INTO albums (album_name, artist_id) VALUES ($
 // User Songs
 const LINK_SONG_TO_USER = `INSERT INTO user_songs (user_id, song_id) VALUES ($1, $2)`;
 
-const GET_SONGS_BY_USER = `
-    SELECT s.song_title, a.artist_name, al.album_name
-    FROM user_songs us
-    JOIN songs s ON us.song_id = s.song_id
-    JOIN artists a ON s.artist_id = a.artist_id
-    JOIN albums al ON s.album_id = al.album_id
-    WHERE us.user_id = $1`;
+const GET_SONGS_WITH_COUNTS = `SELECT * FROM vw_user_songdetails WHERE user_id = $1`;
+
+const INCREMENT_PICK_COUNT = `
+    UPDATE user_songs
+    SET song_pick_count = song_pick_count + 1
+    WHERE user_id = $1 AND song_id = $2`;
+
+const GET_SONGS_BY_USER = `SELECT * FROM vw_user_songdetails WHERE user_id = $1`;
 
 // Users
 const CHECK_USER_EXISTS  = `SELECT EXISTS(SELECT * FROM users WHERE email_address = $1) AS user_exists`;
@@ -83,6 +84,25 @@ async function doesSongExist(song_name, artist_name, album_name) {
         return result.rows[0].song_exists;
     } catch (error) {
         console.error('Error checking if song exists:', error);
+        throw error;
+    }
+}
+
+export async function getSongsWithCounts(user_id) {
+    try {
+        const result = await db.query(GET_SONGS_WITH_COUNTS, [user_id])
+        return result.rows;
+    } catch (error) {
+        console.error('Error getting songs with counts:', error);
+        throw error;
+    }
+}
+
+export async function incrementPickCount(user_id, song_id) {
+    try {
+        await db.query(INCREMENT_PICK_COUNT, [user_id, song_id])
+    } catch (error) {
+        console.error('Error incrementing pick count:', error);
         throw error;
     }
 }

@@ -113,6 +113,33 @@ I will be laying out what im doing and why im doing it to have somewhere to look
 
 ---
 
+## 2026-03-28 (continued) — Smart random pick + DB view
+
+### Changes made:
+
+1. **Created `vw_user_songdetails` DB view** — joins `user_songs`, `songs`, `artists`, `albums` into one flat result per user. Includes `song_pick_count`, `song_tier`, and all song details. Added to `schema.sql` and created in PostgreSQL.
+
+2. **Simplified SQL constants** — `GET_SONGS_BY_USER` and `GET_SONGS_WITH_COUNTS` both now just query `vw_user_songdetails`. No more inline JOINs in app code.
+
+3. **Moved random logic to app layer** — removed weighted random from SQL (`ORDER BY RANDOM() * ...`). DB just returns data, JS decides. `weightedRandom(songs)` function in `routes/songs.js` calculates weights as `1 / (song_pick_count + 1)` and picks accordingly.
+
+4. **Added `GET /randomsong` route** — fetches songs via `getSongsWithCounts()`, runs `weightedRandom()`, increments `song_pick_count` via `incrementPickCount()`, returns song as JSON (`res.json()`).
+
+5. **Updated `home.ejs`** — random button now uses `fetch('/randomsong')` instead of `Math.random()` client-side. Deleted local `getRandomSong()` function.
+
+### Key concepts this session:
+- DB views improve query readability and let PostgreSQL optimize execution plans
+- Business logic (weighted random) belongs in the app, not in SQL
+- `res.json()` returns JSON instead of HTML — this is a REST API endpoint, callable from browser JS via `fetch()`
+- `fetch()` in browser JS lets you call server routes without navigating to a new page
+
+### Next steps:
+- Validate release year (no future dates)
+- Edit / delete songs
+- Song detail view
+
+---
+
 # EXAMPLE TO DOC ROADBLOCKS - Template
 
 ## Roadblock: Database Connection Issue

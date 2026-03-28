@@ -1,5 +1,5 @@
 import express from "express";
-import { getSongs, saveNewSong } from "../db/queries.js";
+import { getSongs, saveNewSong, getSongsWithCounts, incrementPickCount } from "../db/queries.js";
 import { isLoggedIn } from "../middleware/auth.js";
 
 const router = express.Router()
@@ -39,5 +39,23 @@ router.post('/addsong', isLoggedIn, async (req, res) => {
         res.status(500).render('newsong.ejs', { success: false, failed: true })
     }
 });
+
+router.get('/randomsong', isLoggedIn, async (req, res) => {
+    const songs = await getSongsWithCounts(req.session.user.id)
+    const song = weightedRandom(songs)
+    await incrementPickCount(req.session.user.id, song.song_id)
+    res.json(song)
+});
+
+function weightedRandom(songs) {
+    const weights = songs.map(s => 1 / (s.song_pick_count + 1))
+    const total = weights.reduce((sum, w) => sum + w, 0)
+    let random = Math.random() * total
+    for (let i = 0; i < songs.length; i++) {
+        random -= weights[i]
+        if (random <= 0) return songs[i]
+    }
+    return songs[songs.length - 1]
+}
 
 export default router

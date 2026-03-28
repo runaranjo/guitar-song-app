@@ -165,7 +165,12 @@ guitar-song-app/
 ### View: `vw_songdetails`
 Joins `songs`, `artists`, `albums` into a flat result.
 Columns: `song_title`, `artist_name`, `album_name`
-Used by: `getSongs()`, `doesSongExist()`
+Used by: `doesSongExist()`
+
+### View: `vw_user_songdetails`
+Joins `user_songs`, `songs`, `artists`, `albums` into a flat result per user.
+Columns: `user_id`, `song_id`, `song_pick_count`, `song_tier`, `song_title`, `artist_name`, `album_name`, `release_year`, `duration`, `video_url`, `song_tuning`, `song_key`
+Used by: `getSongs()`, `getSongsWithCounts()`
 
 ---
 
@@ -174,7 +179,8 @@ Used by: `getSongs()`, `doesSongExist()`
 ### Songs
 | Function | Exported | What it does |
 |---|---|---|
-| `getSongs(user_id)` | Yes | Returns songs for the logged-in user via JOIN on `user_songs` |
+| `getSongs(user_id)` | Yes | Returns songs for the logged-in user from `vw_user_songdetails` |
+| `getSongsWithCounts(user_id)` | Yes | Returns all songs with `song_pick_count` for weighted random |
 | `saveNewSong(user_id, ...)` | Yes | Checks duplicate, saves artist/album, inserts song, links to user via `linkSongToUser` |
 | `doesSongExist(song, artist, album)` | No | Returns bool — case/whitespace insensitive check via `LOWER(TRIM())` |
 | `linkSongToUser(user_id, song_id)` | No | Inserts row into `user_songs` linking a song to a user |
@@ -253,6 +259,8 @@ Welcome screen with app name and a button linking to `/home`.
 - [x] Songs tied to logged-in user via `user_songs` table
 - [x] Duplicate song check (case and whitespace insensitive)
 - [x] SQL constants pattern in `db/queries.js`
+- [x] Smart weighted random pick using `song_pick_count`
+- [x] `vw_user_songdetails` DB view
 
 ## What's Pending
 
