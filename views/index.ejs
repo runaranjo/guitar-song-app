@@ -1,19 +1,86 @@
 <!-- Step 3 Add Header -->
 <%- include("partials/header.ejs")%>
 
-
 <main class="welcome-main">
-    <div class="welcome-container">
-   <h1>Welcome <span class="welcome-title">to SONGLib!  
-   <img src="https://img.icons8.com/keek/100/guitar.png" alt="guitar"/>
-   </span></h1> 
+    <div class="auth-card">
 
-    <div class="welcome-buttons">
-        <a href="/login"><button class="enter-button">Login</button></a>
-        <a href="/register"><button class="enter-button">Register</button></a>
-    </div>
+        <h1 class="app-title">
+            SongLib
+            <img src="https://img.icons8.com/keek/60/guitar.png" alt="guitar" style="vertical-align: middle;">
+        </h1>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="login">Login</button>
+            <button class="tab-btn" data-tab="register">Register</button>
+        </div>
+
+        <!-- Login Panel -->
+        <div id="login" class="tab-panel active">
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="form-btn">Login</button>
+            </form>
+        </div>
+
+        <!-- Register Panel -->
+        <div id="register" class="tab-panel">
+            <form action="/register" method="POST">
+                <div class="form-group">
+                    <label for="reg-username">Username</label>
+                    <input type="text" id="reg-username" name="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" name="password" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm">Confirm Password</label>
+                    <input type="password" id="reg-confirm" name="confirm_password" placeholder="Confirm Password" required>
+                </div>
+                <p id="password-error" class="password-error"></p>
+                <button type="submit" class="form-btn">Create Account</button>
+            </form>
+        </div>
+
     </div>
 </main>
+
+<script>
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabPanels.forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab).classList.add('active');
+        });
+    });
+
+    document.querySelector('#register form').addEventListener('submit', (e) => {
+        const password = document.getElementById('reg-password').value;
+        const confirm = document.getElementById('reg-confirm').value;
+        const errorEl = document.getElementById('password-error');
+        if (password !== confirm) {
+            e.preventDefault();
+            errorEl.textContent = 'Passwords do not match.';
+        } else {
+            errorEl.textContent = '';
+        }
+    });
+</script>
 
 <!-- Step 3 Add Footer -->
 <%- include("partials/footer.ejs")%>
