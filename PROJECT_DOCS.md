@@ -34,14 +34,20 @@ guitar-song-app/
 ├── app.js                ← Express app setup. Middleware + routes wired here.
 ├── .env                  ← Environment variables (never committed to git)
 ├── db/
-│   ├── db.js             ← PostgreSQL client instance
+│   ├── db.js             ← PostgreSQL client instance. Connects on load.
+│   ├── queries.js        ← All database functions (songs, artists, albums, users)
 │   └── schema.sql        ← Database schema (run manually, not by the app)
 ├── routes/
-│   └── songs.js          ← All route handlers + all DB query functions
+│   ├── songs.js          ← Song route handlers only (home, newsong, addsong)
+│   └── auth.js           ← Auth route handlers (register, login, logout)
+├── middleware/
+│   └── auth.js           ← isLoggedIn middleware — protects routes from unauthenticated access
 ├── views/
 │   ├── index.ejs         ← Landing/welcome page
 │   ├── home.ejs          ← Main hub: show songs, random pick
 │   ├── newsong.ejs       ← Add new song form
+│   ├── register.ejs      ← Registration form
+│   ├── login.ejs         ← Login form
 │   └── partials/
 │       ├── header.ejs    ← HTML head + opening body tag
 │       ├── footer.ejs    ← Closing body/html tags
@@ -49,6 +55,7 @@ guitar-song-app/
 ├── public/
 │   └── styles/
 │       └── styles.css    ← All app styles
+├── COMMANDS.md           ← Useful terminal commands reference
 └── sandbox-test/         ← Throwaway test files (not used in app)
 ```
 
@@ -61,17 +68,27 @@ guitar-song-app/
 **Imports:** `app.js`, `dotenv`
 
 ### `app.js`
-**Purpose:** Creates the Express app. Sets up middleware (JSON parsing, URL-encoded form parsing, static files). Mounts the routes.
-**Imports:** `express`, `routes/songs.js`, `path`, `url`
+**Purpose:** Creates the Express app. Sets up middleware (session, JSON parsing, URL-encoded form parsing, static files). Mounts song and auth routes.
+**Imports:** `express`, `express-session`, `routes/songs.js`, `routes/auth.js`
 
 ### `db/db.js`
-**Purpose:** Creates and exports a single PostgreSQL client instance used across the app.
+**Purpose:** Creates and exports a single PostgreSQL client instance. Calls `db.connect()` on load.
 **Imports:** `dotenv/config`, `pg`
-**Note:** Uses `pg.Client` (single connection). `db.connect()` is called in routes/songs.js — this should eventually move here.
+
+### `db/queries.js`
+**Purpose:** All database functions organized by entity (songs, artists, albums, users). Exported and imported by route files.
+**Imports:** `db/db.js`
 
 ### `routes/songs.js`
-**Purpose:** Handles all HTTP routes AND contains all database query functions. (These should eventually be split — routes stay here, DB functions move to `db/queries.js`.)
-**Imports:** `express`, `db/db.js`, `he` (HTML entity encoder — imported but not currently used)
+**Purpose:** Song-related route handlers only. Uses `isLoggedIn` middleware to protect all routes.
+**Imports:** `express`, `db/queries.js`, `middleware/auth.js`
+
+### `routes/auth.js`
+**Purpose:** Authentication route handlers — register, login, logout.
+**Imports:** `express`, `bcrypt`, `db/queries.js`
+
+### `middleware/auth.js`
+**Purpose:** Exports `isLoggedIn` function. Checks `req.session.user` — passes to next handler if logged in, redirects to `/login` if not.
 
 ### `db/schema.sql`
 **Purpose:** SQL file to set up the database from scratch. Run manually in psql, not by the app.
@@ -80,12 +97,22 @@ guitar-song-app/
 
 ## Routes
 
-| Method | URL | View Rendered | What it does |
-|---|---|---|---|
-| GET | `/` | `index.ejs` | Landing page |
-| GET | `/home` | `home.ejs` | Fetches all songs from DB, passes to view |
-| GET | `/newsong` | `newsong.ejs` | Shows the add song form (blank state) |
-| POST | `/addsong` | `newsong.ejs` | Saves new song. Checks for duplicates. Auto-creates artist/album if new. Returns success/fail message. |
+### Song Routes (`routes/songs.js`)
+| Method | URL | Protected | View Rendered | What it does |
+|---|---|---|---|---|
+| GET | `/` | No | `index.ejs` | Landing page |
+| GET | `/home` | Yes | `home.ejs` | Fetches all songs from DB, passes to view |
+| GET | `/newsong` | Yes | `newsong.ejs` | Shows the add song form |
+| POST | `/addsong` | Yes | `newsong.ejs` | Saves new song. Checks duplicates. Auto-creates artist/album. |
+
+### Auth Routes (`routes/auth.js`)
+| Method | URL | Protected | View Rendered | What it does |
+|---|---|---|---|---|
+| GET | `/register` | No | `register.ejs` | Shows registration form |
+| POST | `/register` | No | `register.ejs` | Hashes password, saves user, redirects to `/login` |
+| GET | `/login` | No | `login.ejs` | Shows login form |
+| POST | `/login` | No | `login.ejs` | Verifies credentials, creates session, redirects to `/home` |
+| GET | `/logout` | No | — | Destroys session, redirects to `/login` |
 
 ---
 
@@ -118,7 +145,7 @@ guitar-song-app/
 | song_tuning | VARCHAR(100) | e.g. "Standard", "Drop D" |
 | song_key | VARCHAR(100) | e.g. "C Major", "A Minor" |
 
-### `users` *(schema ready, not yet wired)*
+### `users`
 | Column | Type | Notes |
 |---|---|---|
 | user_id | SERIAL PK | |
@@ -142,19 +169,35 @@ Used by: `getSongs()`, `doesSongExist()`
 
 ---
 
-## DB Query Functions (in routes/songs.js)
+## DB Query Functions (`db/queries.js`)
 
-| Function | What it does |
-|---|---|
-| `getSongs()` | Returns all songs from `vw_songdetails` |
-| `saveNewSong(...)` | Orchestrates a full song insert — checks duplicate, saves artist, saves album, inserts song |
-| `doesSongExist(song, artist, album)` | Returns bool — checks `vw_songdetails` for exact match |
-| `isArtistCreated(name)` | Returns bool — checks `artists` table |
-| `getArtistId(name)` | Returns artist_id for existing artist |
-| `saveNewArtist(name)` | Inserts artist if new, returns artist_id either way |
-| `isAlbumCreated(name)` | Returns bool — checks `albums` table |
-| `getAlbumId(name)` | Returns album_id for existing album |
-| `saveNewAlbum(name, artist_id)` | Inserts album if new, returns album_id either way |
+### Songs
+| Function | Exported | What it does |
+|---|---|---|
+| `getSongs()` | Yes | Returns all songs from `vw_songdetails` |
+| `saveNewSong(...)` | Yes | Orchestrates full song insert — checks duplicate, saves artist/album, inserts song |
+| `doesSongExist(song, artist, album)` | No | Returns bool — checks `vw_songdetails` for exact match |
+
+### Artists
+| Function | Exported | What it does |
+|---|---|---|
+| `isArtistCreated(name)` | No | Returns bool — checks `artists` table |
+| `getArtistId(name)` | No | Returns artist_id for existing artist |
+| `saveNewArtist(name)` | No | Inserts artist if new, returns artist_id either way |
+
+### Albums
+| Function | Exported | What it does |
+|---|---|---|
+| `isAlbumCreated(name)` | No | Returns bool — checks `albums` table |
+| `getAlbumId(name)` | No | Returns album_id for existing album |
+| `saveNewAlbum(name, artist_id)` | No | Inserts album if new, returns album_id either way |
+
+### Users
+| Function | Exported | What it does |
+|---|---|---|
+| `doesUserExist(email)` | Yes | Returns bool — checks if email is already registered |
+| `saveNewUser(username, email, hashed_password)` | Yes | Inserts new user into `users` table |
+| `getUserByEmail(email)` | Yes | Returns full user row — used during login for password comparison |
 
 ---
 
@@ -176,6 +219,16 @@ Welcome screen with app name and a button linking to `/home`.
 - Shows success (green) or error (red) message banner after submit
 - Server passes `success`, `failed`, and `song_result` (message string) to the view
 
+### `register.ejs` — Registration form
+- Fields: username, email, password
+- On submit: POST to `/register`
+- Shows error message if email already registered
+
+### `login.ejs` — Login form
+- Fields: email, password
+- On submit: POST to `/login`
+- Shows error message if email not found or password incorrect
+
 ### Partials
 - **header.ejs** — `<!DOCTYPE html>` through `<body>`. Includes Google Fonts (DM Mono, Indie Flower, Lobster) and `styles.css`.
 - **footer.ejs** — Closes `</body></html>`
@@ -190,13 +243,15 @@ Welcome screen with app name and a button linking to `/home`.
 - [x] Random song picker (client-side)
 - [x] Success/error feedback on add song
 - [x] Credentials in .env (not hardcoded)
+- [x] Split routes and DB query functions into separate files
+- [x] User registration with bcrypt password hashing
+- [x] User login with session management
+- [x] Logout
+- [x] Auth middleware protecting routes
 
 ## What's Pending
 
-- [ ] Split `routes/songs.js` → routes + `db/queries.js`
-- [ ] Move `db.connect()` into `db/db.js`
-- [ ] User registration
-- [ ] User login + sessions (express-session)
+- [ ] Update landing page with Register and Login buttons
 - [ ] Tie songs to logged-in user (wire up `user_songs` table)
 - [ ] Smart random — weight picks by `song_pick_count` so all songs get equal stage time
 - [ ] Song tier system (song_tier 1-3 for priority)
