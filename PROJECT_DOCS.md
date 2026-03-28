@@ -153,7 +153,7 @@ guitar-song-app/
 | email_address | VARCHAR(300) UNIQUE | |
 | hashed_password | VARCHAR(300) | bcrypt hash |
 
-### `user_songs` *(schema ready, not yet wired)*
+### `user_songs`
 | Column | Type | Notes |
 |---|---|---|
 | user_song_id | SERIAL PK | |
@@ -174,9 +174,10 @@ Used by: `getSongs()`, `doesSongExist()`
 ### Songs
 | Function | Exported | What it does |
 |---|---|---|
-| `getSongs()` | Yes | Returns all songs from `vw_songdetails` |
-| `saveNewSong(...)` | Yes | Orchestrates full song insert — checks duplicate, saves artist/album, inserts song |
-| `doesSongExist(song, artist, album)` | No | Returns bool — checks `vw_songdetails` for exact match |
+| `getSongs(user_id)` | Yes | Returns songs for the logged-in user via JOIN on `user_songs` |
+| `saveNewSong(user_id, ...)` | Yes | Checks duplicate, saves artist/album, inserts song, links to user via `linkSongToUser` |
+| `doesSongExist(song, artist, album)` | No | Returns bool — case/whitespace insensitive check via `LOWER(TRIM())` |
+| `linkSongToUser(user_id, song_id)` | No | Inserts row into `user_songs` linking a song to a user |
 
 ### Artists
 | Function | Exported | What it does |
@@ -248,10 +249,13 @@ Welcome screen with app name and a button linking to `/home`.
 - [x] User login with session management
 - [x] Logout
 - [x] Auth middleware protecting routes
+- [x] Landing page with Register and Login buttons
+- [x] Songs tied to logged-in user via `user_songs` table
+- [x] Duplicate song check (case and whitespace insensitive)
+- [x] SQL constants pattern in `db/queries.js`
 
 ## What's Pending
 
-- [ ] Update landing page with Register and Login buttons
 - [ ] Tie songs to logged-in user (wire up `user_songs` table)
 - [ ] Smart random — weight picks by `song_pick_count` so all songs get equal stage time
 - [ ] Song tier system (song_tier 1-3 for priority)

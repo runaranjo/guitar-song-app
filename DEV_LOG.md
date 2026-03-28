@@ -83,6 +83,36 @@ I will be laying out what im doing and why im doing it to have somewhere to look
 
 ---
 
+## 2026-03-28 — Session with Claude
+
+### Changes made:
+
+1. **Refactored `db/queries.js` to use SQL constants** — all SQL strings moved to named constants at the top of the file (e.g. `CHECK_SONG_EXISTS`, `INSERT_SONG`, `GET_SONGS_BY_USER`). Functions now reference constants instead of inline strings. Cleaner, easier to read and maintain. Best practice for Node.js/Express apps.
+
+2. **Fixed duplicate song check** — `CHECK_SONG_EXISTS` now uses `LOWER(TRIM())` on both sides of the comparison. Prevents duplicate entries caused by different casing (e.g. `queen` vs `Queen`) or extra spaces.
+
+3. **Wired up `user_songs` table** — songs are now tied to the logged-in user:
+   - `INSERT_SONG` now returns `song_id` via `RETURNING song_id`
+   - New function `linkSongToUser(user_id, song_id)` — inserts into `user_songs` after a song is saved
+   - `saveNewSong` now accepts `user_id` as first argument, calls `linkSongToUser` after insert
+   - `getSongs(user_id)` now uses `GET_SONGS_BY_USER` — JOINs `user_songs`, `songs`, `artists`, `albums` filtered by `user_id`
+   - `GET /home` passes `req.session.user.id` to `getSongs`
+   - `POST /addsong` passes `req.session.user.id` to `saveNewSong`
+
+4. **Updated landing page** — replaced "Click to enter!" with Login and Register buttons.
+
+### Key concepts this session:
+- SQL constants pattern — store query strings as named constants, keep functions short
+- `RETURNING` in PostgreSQL INSERT — gets back the newly created row's ID without a second query
+- `user_songs` as a bridge table — songs catalog is global, each user has their own library via this table
+
+### Next steps:
+- Smart random pick using `song_pick_count`
+- Edit / delete songs
+- Song detail view
+
+---
+
 # EXAMPLE TO DOC ROADBLOCKS - Template
 
 ## Roadblock: Database Connection Issue

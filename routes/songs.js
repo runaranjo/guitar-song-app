@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
     let song_list = [];
-    const song_data = await getSongs();
+    const song_data = await getSongs(req.session.user.id);
     song_data.rows.forEach(song => {
         song_list.push({ song_title: song.song_title, artist_name: song.artist_name })
     });
@@ -32,7 +32,7 @@ router.post('/addsong', isLoggedIn, async (req, res) => {
     const song_key = req.body.song_key;
 
     try {
-        const new_song_result = await saveNewSong(song_name, artist_name, album_name, release_year, song_duration, video_url, song_tuning, song_key)
+        const new_song_result = await saveNewSong(req.session.user.id, song_name, artist_name, album_name, release_year, song_duration, video_url, song_tuning, song_key)
         res.render('newsong.ejs', { success: new_song_result.success, failed: new_song_result.failed, song_result: new_song_result.song_messsage });
     } catch (error) {
         console.error('Error adding song:', error)
